@@ -112,6 +112,102 @@ tribal-knowledge/images/ → watcher.sh → process.sh (GPT-4V) → TRIBAL_KNOWL
 
 ---
 
+## TIMER BLOCKER PATTERN
+
+**Implementation reference:** `flavio__mrln_mlflow-13652__hfi-flow.html` (lines 405-605)
+
+**Critical concept:** User cannot proceed until verification complete. No bypassing allowed.
+
+### HTML Structure
+
+```html
+<div class="verification-section">
+    <button class="btn btn-danger btn-verify" id="btnVerifyRequirements">
+        VERIFY REQUIREMENTS
+    </button>
+</div>
+
+<div class="hidden-content" id="hiddenContent">
+    <!-- Sprint start controls hidden until verification complete -->
+    <button class="btn btn-success" id="btnStartSprint">START SPRINT</button>
+</div>
+```
+
+### CSS Implementation
+
+```css
+.hidden-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.hidden-content.visible {
+    display: block;
+    opacity: 1;
+}
+
+.btn-verify:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+```
+
+### JavaScript Logic
+
+```javascript
+let verificationComplete = false
+const btnVerify = document.getElementById('btnVerifyRequirements')
+const hiddenContent = document.getElementById('hiddenContent')
+
+btnVerify.addEventListener('click', () => {
+    if (verificationComplete) return
+
+    // Run all verification checks
+    const allFieldsFilled = checkAllFields()
+    const codexVerified = checkCodexIfNeeded()
+
+    if (!allFieldsFilled || !codexVerified) {
+        alert('Complete all required fields before proceeding')
+        return
+    }
+
+    // Mark as verified
+    verificationComplete = true
+    btnVerify.disabled = true
+    btnVerify.textContent = 'VERIFIED ✓'
+
+    // Reveal hidden content
+    hiddenContent.classList.add('visible')
+})
+```
+
+### Key Requirements
+
+1. **No bypass:** Sprint cannot start until verification button clicked and passed
+2. **State tracking:** `verificationComplete` flag prevents re-running checks
+3. **Visual feedback:** Button changes from "VERIFY REQUIREMENTS" to "VERIFIED ✓"
+4. **Progressive disclosure:** START SPRINT button hidden until verification complete
+5. **Validation gates:** All fields must be filled, Codex checks must pass (if applicable)
+
+### User Experience Flow
+
+```
+1. User fills in sprint info
+2. User selects models
+3. User checks timer checkbox
+4. VERIFY REQUIREMENTS button becomes active
+5. User clicks VERIFY REQUIREMENTS
+6. System runs all checks
+7. If all pass: Button shows "VERIFIED ✓", START SPRINT appears
+8. If any fail: Alert with error, user must fix issues
+9. START SPRINT only clickable after verification complete
+```
+
+**Critical:** "If I don't hit the VERIFY button, I don't get the START SPRINT button. So there's no way I can start."
+
+---
+
 ## COMPONENT 2: Codex Verification Module
 
 **File:** `agents/mercor-watcher/verify-codex.sh`
