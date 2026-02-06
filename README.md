@@ -1,6 +1,25 @@
 # Sprint Verification Watcher
 
-**Purpose:** Prevent wrong model selection in Mercor sprints. Verify Codex CLI and sprint requirements BEFORE starting any task.
+**Two Modes:**
+1. **Tribal Knowledge Mode** - Auto-process Slack screenshots for insights
+2. **Don't Do Dumb Shit Mode** - Verify sprint requirements before starting
+
+---
+
+## Mode 1: Tribal Knowledge
+
+Watches `tribal-knowledge/images/` directory. When screenshots dropped:
+- GPT-4V extracts insights
+- Updates tribal knowledge document
+- Plays war drums alert
+
+**Purpose:** Capture platform changes, sprint announcements, edge cases from Slack
+
+---
+
+## Mode 2: Don't Do Dumb Shit
+
+Prevents wrong model selection in Mercor sprints.
 
 **Problem Solved:** TASK_6407 was invalidated because wrong models were used for both Model A and Model B (Sonnet 4.5 instead of Opus 4.6 + GPT Codex 5.3). Result: $0 payment, all work wasted.
 

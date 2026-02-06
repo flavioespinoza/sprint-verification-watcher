@@ -1,19 +1,36 @@
 # SPEC: Sprint Verification Watcher
 
+**Two Modes:**
+1. **Tribal Knowledge Mode** - Auto-process screenshots
+2. **Don't Do Dumb Shit Mode** - Verify sprint requirements
+
+---
+
+## MODE 1: TRIBAL KNOWLEDGE
+
+**Purpose:** Capture platform changes, sprint announcements, edge cases from Slack
+
+**How it works:**
+```
+tribal-knowledge/images/ → watcher.sh → process.sh (GPT-4V) → TRIBAL_KNOWLEDGE___MERCOR.md → alert.sh (war drums)
+```
+
+**Functionality (Existing - Keep):**
+- Watch `tribal-knowledge/images/` every 30 seconds
+- When screenshots dropped: Extract text with GPT-4V
+- Update tribal knowledge document
+- Play war drums alert when complete
+- Show notification with insights
+
+---
+
+## MODE 2: DON'T DO DUMB SHIT
+
 **Purpose:** Prevent another TASK_6407 mistake. Verify Codex CLI and sprint requirements BEFORE starting any task.
 
 **Trigger:** User says "merc let's go" or hits START on sprint
 
----
-
-## SYSTEM OVERVIEW
-
-### Existing Functionality (Keep)
-```
-tribal-knowledge/images/ → watcher.sh → process.sh → TRIBAL_KNOWLEDGE___MERCOR.md → alert.sh (war drums)
-```
-
-### New Functionality (Add)
+**How it works:**
 ```
 "merc let's go" → sprint-guard.sh → Verification Popup → Music plays → Block until confirmed
 ```
